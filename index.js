@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+const router = require('./routes/index.js');
+
 const port = 3000;
 
 // mongoose connection
@@ -24,12 +26,25 @@ const productRoute = require('./routes/product.route.js');
 
 // request -> middleware -> route -> response
 
-const middleware = (req, res, next) => {
-  console.log('middleware');
+const authMiddleware = (req, res, next) => {
+  req.headers.authorization = 'Bearer 123';
+
+  const token = req.headers.authorization.split(' ')[1];
+
+  // check token
+
+  // if token is valid -> find user by token
+
+  // token = {user_id: 123, exp: 123123123}
+
+  // const user = await User.findById(token.user_id);
+
+  // req.user = user;
   next();
 };
 
-app.use('/products', productRoute);
+app.use(middleware);
+app.use(router);
 
 // error handler middleware
 app.use((err, req, res, next) => {
